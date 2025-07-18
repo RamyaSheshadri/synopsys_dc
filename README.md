@@ -46,3 +46,27 @@ source .cshrc
 mkdir 190
 cd 190
 ```
+
+> This changes your shell to C shell, sets up the Synopsys environment, creates a folder `190`, and navigates into it.
+---
+
+## File Structure
+Your project folder should look like this after adding source files:
+190/
+├── half_adder.v # Verilog HDL for Half Adder
+├── synthesize.tcl # TCL script to run synthesis
+├── README.md # Project documentation
+├── output/ # (Auto-generated synthesis reports, logs)
+
+
+---
+
+## 🧠 Verilog Code
+
+Here's a basic half adder module in Verilog:
+```
+module ha(input a,b, output s,c);
+assign s=a^b;
+assign c=a&b;
+endmodule
+```
