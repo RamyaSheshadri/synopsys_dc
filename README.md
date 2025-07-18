@@ -60,7 +60,8 @@ Your project folder should look like this after adding source files:
 
 
 ---
-
+type the command: gedit ha.v
+Type the code in the editor:
 ## 🧠 Verilog Code
 
 Here's a basic half adder module in Verilog:
@@ -70,3 +71,43 @@ assign s=a^b;
 assign c=a&b;
 endmodule
 ```
+
+Similarly: ha_tb.v
+```
+`timescale 1ns/1ps
+
+module half_adder_tb;
+
+    // Testbench signals
+    reg a, b;
+    wire s,c;
+
+    // Instantiate the Half Adder module
+    ha uut ( .a(a),.b(b), .s(s),.c(c));
+
+    initial begin
+        // Display header
+        $display("A B | SUM CARRY");
+        $display("---------------");
+
+        // Test all possible input combinations
+        a = 0; b = 0; #10;
+        $display("%b %b |  %b    %b", a, b, sum, carry);
+
+        a = 0; b = 1; #10;
+        $display("%b %b |  %b    %b", a, b, sum, carry);
+
+        a = 1; b = 0; #10;
+        $display("%b %b |  %b    %b", a, b, sum, carry);
+
+        a = 1; b = 1; #10;
+        $display("%b %b |  %b    %b", a, b, sum, carry);
+
+        $finish;
+    end
+endmodule
+```
+
+## Create an SDC and TCL file:
+TCL generates timing,area and piwer info
+SDC generates clock timing info
