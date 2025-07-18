@@ -404,7 +404,13 @@ You get this QoR table after synthesis or optimization, and it is used to compar
 <img width="1920" height="1053" alt="qor rpt" src="https://github.com/user-attachments/assets/ea2007e8-70ed-4f2e-bb84-cd9f84366525" />
 <img width="1920" height="1053" alt="qor rpt 2" src="https://github.com/user-attachments/assets/44f6cc69-a75e-487c-b05a-844837e6af47" />
 
-- **QoR = the synthesis tool’s report card for your design.**  
+- **QoR = the synthesis tool’s report card for your design.**
+- QoR = A summary of the most important outputs from the synthesis stage.
+- It’s not a separate report — it’s a collected view that includes key parts of:
+  - Timing Report
+  - Area Report
+  - Power Report
+  - (Sometimes: DRC Summary, Gate Count, Logic Levels, etc.)
 - It tells you **how fast**, **how small**, and **how efficient** your circuit is.
 - Every time you see or generate a `.rep` file after synthesis (`report_qor`, `report_timing`, etc.), you're looking at the **QoR summary**.
 - Tracking QoR across different designs lets you compare and decide which version to keep or optimize further. It becomes a powerful part of your flow — especially in VLSI placements and real-world tapeouts!
