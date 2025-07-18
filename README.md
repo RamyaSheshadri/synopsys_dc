@@ -121,6 +121,51 @@ endmodule
   - Design environment parameters (e.g., loading, operating conditions)
 - **Importance:** Ensures that the synthesized design meets real-world performance requirements by guiding the tool on critical paths, timing budgets, and other physical considerations.
 
+## Why Use an SDC File for Combinational Circuits?
+
+Even though a half adder is **purely combinational** (no clocks or sequential logic), including an SDC (Synopsys Design Constraints) file is a common best practice in professional synthesis flows:
+
+- **Tool Compliance:** Many synthesis and timing tools require or expect an SDC file, even for combinational logic, to maintain consistency.
+- **Modeling Inputs/Outputs:** SDC lets you specify attributes like input/output delay, load, or driving cell, modeling real-world or interfacing logic.
+- **Virtual Clock Concept:** For I/O timing, a virtual clock can be defined—even if your design has no actual clock—to let you use input/output delay constraints.
+- **Max Delay Constraints:** You can still guide the tool's optimization by constraining the maximum allowable delay between specific input/output combinations, as an example of target timing.
+
+**Summary Table**
+
+| SDC Constraint      | Use in Combinational?                           |
+|---------------------|------------------------------------------------|
+| Input/Output Delay  | Model I/O interface timing                     |
+| Virtual Clock       | Enable timing constraints on I/O               |
+| Load/Drive         | Simulate physical characteristics for outputs   |
+| Max Delay           | Impose timing limits between I/Os              |
+
+---
+
+## SDC File for Half Adder
+
+
+```
+## 📄 half_adder.sdc
+
+# half_adder.sdc
+# Minimal SDC for simple combinational half adder
+
+# Define a virtual clock (10ns period, not connected to module)
+create_clock -name virt_clk -period 10
+
+# Set typical input delays (relative to virtual clock)
+set_input_delay 2.0 -clock virt_clk [get_ports {a b}]
+
+# Set typical output delays (relative to virtual clock)
+set_output_delay 2.0 -clock virt_clk [get_ports {sum carry}]
+
+# Optionally set load for outputs (represents capacitance)
+set_load 0.01 [get_ports sum]
+set_load 0.01 [get_ports carry]
+
+# End of SDC
+```
+
 ### What is a `.tcl` File?
 
 - **Stands for:** Tool Command Language (pronounced “tickle”).
@@ -131,6 +176,45 @@ endmodule
   - Report generation (timing, area, power)
   - Custom tool behaviors or batch processes
 - **Importance:** Enables reproducible, automated design flows and reduces human error. TCL scripting is widely supported across EDA tools and is a key skill for VLSI/ASIC engineers.
+
+### TCL script for half adder:
+```
+
+# 🌟 Clean up any previous designs
+remove_design -all
+
+# ============================
+# 🔧 Setup Libraries and Paths
+# ============================
+set search_path [list ../rtl ../lib]
+set link_library  "* saed32rvt_tt1p05v25c.db"
+set target_library "saed32rvt_tt1p05v25c.db"
+
+#Read RTL
+analyze -format verilog half_adder.v
+elaborate half_adder -architecture verilog -library WORK
+
+# Define Current Design
+current_design half_adder
+
+#Link Design
+link
+
+#Check Design
+check_design
+
+#Compile Design
+compile -map_effort medium -area_effort high
+
+#Export Synthesized Netlist
+write_file -f verilog -hier -output half_adder_netlist.v
+
+#Reports 
+report_area > reports/half_adder_area.rpt
+report_timing > reports/half_adder_timing.rpt
+report_power > reports/half_adder_power.rpt
+```
+
 
   ## What is dc_shell?
 
