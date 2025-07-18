@@ -401,10 +401,8 @@ You get this QoR table after synthesis or optimization, and it is used to compar
 - **Compare Runs:** Use QoR to compare two different synthesis strategies or code versions.
 - **Guide Optimization:** "Does this version improve area without hurting timing?"
 
-## 🧾 Example: Sample QoR Table (from Synopsys DC)
-
+<img width="1920" height="1053" alt="qor rpt" src="https://github.com/user-attachments/assets/ea2007e8-70ed-4f2e-bb84-cd9f84366525" />
 <img width="1920" height="1053" alt="qor rpt 2" src="https://github.com/user-attachments/assets/44f6cc69-a75e-487c-b05a-844837e6af47" />
-
 
 - **QoR = the synthesis tool’s report card for your design.**  
 - It tells you **how fast**, **how small**, and **how efficient** your circuit is.
