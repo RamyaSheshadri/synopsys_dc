@@ -132,6 +132,19 @@ endmodule
   - Custom tool behaviors or batch processes
 - **Importance:** Enables reproducible, automated design flows and reduces human error. TCL scripting is widely supported across EDA tools and is a key skill for VLSI/ASIC engineers.
 
+  ## What is dc_shell?
+
+**dc_shell** is the command-line interface for Synopsys Design Compiler, one of the most widely used RTL synthesis tools in the semiconductor industry. When you launch `dc_shell`, you enter a text-based environment where you can input commands interactively or execute scripts to synthesize and analyze digital hardware designs (such as those written in Verilog or VHDL)
+
+- It allows you to run synthesis commands, set up and manage libraries, elaborate designs, optimize for timing, area, and power, and generate reports and netlists.
+- You can operate it interactively (typing commands one by one) or by running a **TCL** script (`-t` mode) to automate your flow.
+- `dc_shell` works alongside Design Compiler’s graphical interface (Design Vision), but is preferred for automation and scripting in most professional flows.
+- To start Design Compiler, you type `dc_shell` (or `dc_shell-t` for TCL mode) at the Unix/Linux terminal prompt; you will then see the `dc_shell>` prompt.
+
+**In short:**  
+`dc_shell` is where you control the entire synthesis process for your digital design—setting up technology libraries, reading in RTL code, applying constraints, running optimization, and outputting your gate-level netlist and synthesis reports.
+
+** In this specific workflow,we used dc_shell (or dc_shell-t -f ha.tcl) primarily to run your .tcl script for synthesis and report generation.
 ### Summary Table
 
 | File Type  | Full Form                         | Main Purpose                                     | Example Use                           |
