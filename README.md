@@ -369,29 +369,47 @@ The half adder's power consumption is extremely low with negligible switching po
 The design critical path is very short (low delay), with only a single logic level, showing outstanding timing performance and no negative slack or violations. This is ideal for elementary logic cells like a half adder.
 
 ---
+## What is QoR (Quality of Results)?
 
-### 4. Additional Power Report Screenshot
+**QoR (Quality of Results)** is a collection of synthesis and implementation metrics used to evaluate how good your hardware design is in terms of **timing, area, power, and performance**.
 
-- **Similar content as first power report**
-- **Warnings:** "No defined clock in the design" and "Design has unannotated primary inputs" (these are minor or expected for simple combinational circuits without a clock)
-- **Consistent power and leakage values**
+It is an essential part of any synthesis or implementation flow, especially when using tools like **Synopsys Design Compiler**, **Vivado**, or **Yosys**.
 
-**Inference:**  
-The warnings underline that the design is fully combinational (not sequential), and unannotated inputs are not a concern for small test cases. Power breakdown remains as previously observed—dominated by internal and leakage power.
+---
+##  What Does QoR Measure?
+
+The QoR report typically includes:
+
+|  Metric           |  Description                                      |
+|---------------------|-----------------------------------------------------|
+| **Slack (ns)**      | Timing margin before a path becomes violating       |
+| **Critical Path**   | Longest delay path in the design (limits frequency) |
+| **Max Frequency**   | Inverse of critical path (how fast your design runs)|
+| **Area (μm²)**      | Total silicon area used by the design               |
+| **Power (μW/mW)**   | Estimated power consumption                         |
+| **Gate/Cell Count** | Total logic elements used (e.g., AND, XOR gates)    |
+| **Levels of Logic** | Number of gate "layers" between input and output    |
+
+You get this QoR table after synthesis or optimization, and it is used to compare how efficient and optimized the final design is.
 
 ---
 
-### 📂 Summary Table
+## Why is QoR Important?
 
-| Metric                | Value             | Notes                                           |
-|-----------------------|-------------------|-------------------------------------------------|
-| **Total Power**       | ~1.21 μW          | Low, typical for small combinational circuits    |
-| **Combinational Area**| 6.34 units        | Two logic gates only                            |
-| **Timing Delay**      | 0.09 (likely ns)  | Single level of logic, no violations             |
-| **Cells Used**        | 2                 | XOR and AND implementations                     |
-| **Warnings**          | No clock, inputs  | Not critical for this test scenario              |
+- **Benchmark Your Design:** Know how well your design performs on key metrics.
+- **Identify Bottlenecks:** Slack issues? Too much area? Too slow? QoR tells you.
+- **Compare Runs:** Use QoR to compare two different synthesis strategies or code versions.
+- **Guide Optimization:** "Does this version improve area without hurting timing?"
 
----
+## 🧾 Example: Sample QoR Table (from Synopsys DC)
 
-> 📄 *These reports confirm that the synthesized Half Adder is highly efficient in terms of area, power, and timing, with no timing violations and an extremely compact gate-level implementation.*
+<img width="1920" height="1053" alt="qor rpt 2" src="https://github.com/user-attachments/assets/44f6cc69-a75e-487c-b05a-844837e6af47" />
+
+
+- **QoR = the synthesis tool’s report card for your design.**  
+- It tells you **how fast**, **how small**, and **how efficient** your circuit is.
+- Every time you see or generate a `.rep` file after synthesis (`report_qor`, `report_timing`, etc.), you're looking at the **QoR summary**.
+- Tracking QoR across different designs lets you compare and decide which version to keep or optimize further. It becomes a powerful part of your flow — especially in VLSI placements and real-world tapeouts!
+
+> *These reports confirm that the synthesized Half Adder is highly efficient in terms of area, power, and timing, with no timing violations and an extremely compact gate-level implementation.*
 
