@@ -160,4 +160,7 @@ dve -vpd vcdplus.vpd &
  - Zoom, pan, and inspect transitions
  - Save waveforms for reports
 
+<img width="1895" height="1028" alt="image (13)" src="https://github.com/user-attachments/assets/134d4f7c-3615-4847-b17f-cfa79bcc496c" />
+## Output waveform:
+<img width="1851" height="1019" alt="image (12)" src="https://github.com/user-attachments/assets/1c2ea3da-31ba-44eb-b5d6-9805719e50bb" />
 
