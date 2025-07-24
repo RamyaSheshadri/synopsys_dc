@@ -537,9 +537,10 @@ report_timing -path full -delay max
 
 **This SDC file provides essential clock, input/output, and internal timing constraints,** which enable Synopsys Design Compiler to correctly analyze and optimize your design for timing. These commands help ensure your synthesized counter will function reliably at your specified clock frequency (100 MHz) and interface cleanly with the rest of your digital system.
 
-If you have more specific questions about any line or want advice on tailoring constraints for your design, feel free to ask!
 ### TCL Script:
+
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9d0e3c33-76cd-4954-b438-adcac5f1a8c9" />
+
 **This script automates the standard ASIC synthesis steps:**
 - Setup library
 - Read and elaborate RTL design
