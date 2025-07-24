@@ -417,3 +417,20 @@ You get this QoR table after synthesis or optimization, and it is used to compar
 
 > *These reports confirm that the synthesized Half Adder is highly efficient in terms of area, power, and timing, with no timing violations and an extremely compact gate-level implementation.*
 
+# 3 bit Synchronous Counter:
+### Overview:
+This project demonstrates synthesizing a 3-bit synchronous counter using Synopsys Design Compiler (DC). The process takes Verilog RTL, applies synthesis with timing constraints, and generates a gate-level netlist suitable for ASIC design flow.
+
+### counter.v:
+```
+module counter(input clk,rst,
+output reg y);
+always@(posedge clk)
+begin
+    if(rst)
+        y<=0;
+    else
+        y<=y+1
+end
+endmodule
+```
