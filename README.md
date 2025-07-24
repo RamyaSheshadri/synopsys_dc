@@ -461,3 +461,10 @@ end
   end
 endmodule
 ```
+**To view waveform:**
+- first compile using: vcs -l run.log -R -debug_access+all +vcs+vcdpluson +vpd counter.v counter_tb.v
+- then: dve -vpd vcdplus.vpd &
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3808bb29-33ef-4032-93aa-0c8413985277" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/38d4354f-9b80-4f35-8541-9f001eaef785" />
+
