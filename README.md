@@ -434,3 +434,30 @@ begin
 end
 endmodule
 ```
+
+### counter_tb.v
+```
+modult counter_tb();
+reg clk,rst;
+wire y;
+counter uut(clk,rst,y);
+initial
+    begin
+        clk=0;
+    end
+always #5 clk=~clk;
+
+initial
+begin
+rst=0;
+#10 rst=1;
+#10 rst=0;
+#100 $finish;
+end
+
+ initial begin
+    $dumpfile("dump.vcd");         // VCD file name
+    $dumpvars(0, counter_tb);      // Dump all variables in this module
+  end
+endmodule
+```
