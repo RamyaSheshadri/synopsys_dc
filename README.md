@@ -549,3 +549,22 @@ report_timing -path full -delay max
 - Export mapped netlist
 - Generate area/timing/power/QoR reports
 You can launch Synopsys DC, load this script, and it will run all steps for your counter design in one go, provided all paths and module names are correct.
+
+Yes, you are correct! To run your synthesis Tcl script (such as `counter.tcl`), you need to launch the Synopsys Design Compiler shell (dc_shell). Here’s how you do it:
+
+## Steps to Run Your Tcl Script in Synopsys DC
+
+1. **Open a terminal** on your system.
+2. **Start the Design Compiler shell** by typing:
+   ```bash
+   dc_shell
+   ```
+3. **Source your Tcl script** inside the DC shell:
+   ```tcl
+   source counter.tcl
+   ```
+## What Happens Next
+- The Design Compiler will execute the commands in your Tcl script.
+- It will read your Verilog design, apply SDC constraints, perform synthesis, and generate reports and netlists as specified in your script.
+
+
