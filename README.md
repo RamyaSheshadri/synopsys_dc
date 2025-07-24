@@ -468,3 +468,83 @@ endmodule
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3808bb29-33ef-4032-93aa-0c8413985277" />
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/38d4354f-9b80-4f35-8541-9f001eaef785" />
 
+### SDC(Synopsys Design Compiler) top.sdc
+This file is used to define **timing constraints** for your counter module during synthesis with Synopsys Design Compiler. Each section of the script plays a specific role to guide the synthesis tool in analyzing the circuit's timing.
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ab93316a-11d3-4c68-9b04-8a86c82af623" />
+
+Below is an explanation:
+### 1. Define the Clock Signal
+```tcl
+create_clock -name clk -period 10 [get_ports clk]
+```
+- **Purpose:** Defines a clock named `clk` with a period of 10 ns (corresponding to a frequency of 100 MHz).
+- **Effect:** All timing analysis and constraints will be referenced to this clock.
+
+### 2. Set Input Delays
+
+```tcl
+set_input_delay 2 -clock clk [get_ports reset]
+```
+- **Purpose:** Sets the input arrival time for the `reset` port to 2 ns relative to the clock.
+- **Effect:** Accounts for the delay from the external signal source (like a testbench or other logic) to the input pin of the design.
+
+### 3. Set Output Delays
+
+```tcl
+set_output_delay 2 -clock clk [get_ports q]
+```
+- **Purpose:** Sets output required time for the `q` port (which is the 3-bit counter output) to 2 ns relative to the clock.
+- **Effect:** Informs the tool how much time downstream logic has to latch the signal after it is generated.
+
+### 4. Setup and Hold Times for Flip-Flops
+
+```tcl
+set_max_delay 5 -from [get_pins uut/q[3]] -to [get_pins uut/q[0]]
+set_min_delay 1 -from [get_pins uut/q[3]] -to [get_pins uut/q[0]]
+```
+- **Purpose:** Specifies maximum and minimum delays between specific flip-flop pins, which could correspond to setup and hold requirements.
+- **Effect:** Helps in analyzing internal paths between flip-flops, enforcing them to be between 1 and 5 ns.
+- **Note:** The actual pin names and constraints may need adjustment depending on your cell library and design.
+
+### 5. Multi-cycle and Special Path Constraints
+
+(Comments in your file, but here’s what they mean)
+- For signals like reset, if they are synchronized to the clock, you might specify a multi-cycle path.
+- Example (commented in your file):
+
+```tcl
+set_multicycle_path 2 -setup -from [get_ports reset] -to [get_pins uut/q]
+```
+**Effect:** If uncommented, instructs DC that the path from reset to q stretches across 2 clock cycles (multi-cycle path).
+
+### 6. False Paths
+
+```tcl
+set_false_path -from [get_ports reset]
+```
+- **Purpose:** Tells the tool to ignore timing analysis for the path from the `reset` port.
+- **Use Case:** Useful for asynchronous resets, which don’t need traditional timing checking.
+
+### 7. Reporting
+
+```tcl
+report_timing -path full -delay max
+```
+- **Purpose:** Generates a detailed timing report, showing the maximum delay paths through the design.
+- **Effect:** This helps you check for violations and see if your constraints are being met.
+
+## Summary
+
+**This SDC file provides essential clock, input/output, and internal timing constraints,** which enable Synopsys Design Compiler to correctly analyze and optimize your design for timing. These commands help ensure your synthesized counter will function reliably at your specified clock frequency (100 MHz) and interface cleanly with the rest of your digital system.
+
+If you have more specific questions about any line or want advice on tailoring constraints for your design, feel free to ask!
+### TCL Script:
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9d0e3c33-76cd-4954-b438-adcac5f1a8c9" />
+**This script automates the standard ASIC synthesis steps:**
+- Setup library
+- Read and elaborate RTL design
+- Apply constraints
+- Synthesize (compile)
+- Export mapped netlist
+- Generate area/timing/power/QoR reports
+You can launch Synopsys DC, load this script, and it will run all steps for your counter design in one go, provided all paths and module names are correct.
