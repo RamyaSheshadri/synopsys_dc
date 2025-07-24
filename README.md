@@ -567,4 +567,108 @@ Yes, you are correct! To run your synthesis Tcl script (such as `counter.tcl`), 
 - The Design Compiler will execute the commands in your Tcl script.
 - It will read your Verilog design, apply SDC constraints, perform synthesis, and generate reports and netlists as specified in your script.
 
+# Explanation of Synthesis Reports:
 
+## 1. Power Report
+**Purpose:**  
+Estimates how much power your synthesized counter will consume in operation.
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/51b3e635-5504-4615-9c61-c8eabba68579" />
+
+### Key Sections & Meaning
+
+- **Global Operating Voltage:**  
+  The design operates at 1.05V (supply voltage).
+
+- **Total Dynamic Power (2.9572μW):**  
+  Power consumed due to the logic switching activities. This is further split into:
+  - **Internal Power (2.7340μW):**  
+    Energy dissipated inside logic gates as they switch.
+  - **Net Switching Power (0.2232μW):**  
+    Energy from charging/discharging load capacitance on nets.
+
+- **Cell Leakage Power (4.5986nW):**  
+  Leakage current drawn from the supply even when the logic isn’t switching (standby loss).
+
+- **Total Power (7.5558μW):**  
+  The sum of dynamic and leakage power—this is the complete power profile for your counter.
+
+#### How to interpret:
+- These values are LOW, as expected for a small 3-bit sequential counter in 32nm technology.
+- The vast majority is dynamic power. Leakage is much less critical at this size, but would matter for larger chips.
+
+## 2. Area Report
+
+**Purpose:**  
+Shows how much silicon area your synthesized logic occupies.
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/78d5aa2d-b3d1-4742-a99c-4f6bcc3e7718" />
+
+### Important Fields
+
+- **Number of Ports, Nets, Cells:**  
+  - *Ports:* 5 (inputs + outputs)
+  - *Nets:* 12 (wires connecting logic)
+  - *Cells:* 10 (standard cell components)
+  - *Sequential Cells:* 7 (e.g., flip-flops for each of the 3 counter bits, and possibly a few for control)
+  - *Combinational Cells:* 3 (e.g., logic gates for incrementing the counter)
+
+- **Combinational Area (18.04μm²):**  
+  Area used by gates (AND, OR, XOR).
+
+- **Non-Combinational Area (19.82μm²):**  
+  Area for sequential elements (D flip-flops, latches).
+
+- **Total Cell Area (37.87μm²):**  
+  Combined standard cells’ area.
+
+- **Total Area (39.19μm²):**  
+  Includes interconnect (metal wiring) overhead. The difference with “cell area” is the routing overhead.
+
+#### How to interpret:
+- This is a *very compact* and highly optimized digital block—just a few dozen square microns.
+- The cell ratio shows your design is dominated about equally by combinational and sequential logic.
+
+## 3. Timing Report
+
+**Purpose:**  
+Checks if your counter meets the required clock speed and that all signals arrive in time.
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0b5189e9-2b5d-40c1-8678-eb9fb3467fb4" />
+
+### Key Metrics
+
+- **Clock Period:**  
+  You specified 10ns (implies 100MHz operation).
+
+- **Data Required Time (9.97ns):**  
+  The maximum allowed time for data to propagate from one register (flip-flop) to another and still meet setup timing.
+
+- **Data Arrival Time (0.29ns):**  
+  How long it actually takes for data to traverse the critical path.
+
+- **Slack (9.68ns):**  
+  Margin between required and actual arrival time.  
+  - *Positive slack* (which you have) means the design is FAST—signals arrive much earlier than required.
+  - *Negative slack* would indicate a timing violation (design too slow).
+
+#### How to interpret:
+- Your counter is “over-designed” for the constraint: it can work at much higher frequencies if needed.
+- Typical for simple counters; adding complexity or more bits would reduce the slack.
+
+## Putting It All Together
+
+- **Your 3-bit counter is tiny, low-power, and fast.**
+- You are well within safe limits for area, power, and speed.
+- To optimize for larger designs, trade-offs may appear (e.g., area vs. speed, power vs. performance).
+
+## Why Do These Reports Matter?
+
+- **Power:** Essential if battery life, thermal limits, or energy budget matters.
+- **Area:** Drives cost per chip; large area means higher cost and possibly lower yield.
+- **Timing:** Ensures your design runs at the intended frequency without glitches or errors.
+
+## What Would You Do Next?
+
+- If *meeting even stricter* clock periods (>100MHz): no changes needed.
+- If optimizing for *minimum area or power*: try re-synthesizing with different tool switches/constraints.
+- For a *bigger counter*: expect linear-ish scaling of area and power, but watch for possible increases in timing delays.
+
+If you want line-by-line details for any specific value or want to learn how to further optimize any of these parameters, let me know!
