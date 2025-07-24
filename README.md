@@ -665,10 +665,42 @@ Checks if your counter meets the required clock speed and that all signals arriv
 - **Area:** Drives cost per chip; large area means higher cost and possibly lower yield.
 - **Timing:** Ensures your design runs at the intended frequency without glitches or errors.
 
-## What Would You Do Next?
+## Understanding the Role of SDC File vs. Area and Power Reports
 
-- If *meeting even stricter* clock periods (>100MHz): no changes needed.
-- If optimizing for *minimum area or power*: try re-synthesizing with different tool switches/constraints.
-- For a *bigger counter*: expect linear-ish scaling of area and power, but watch for possible increases in timing delays.
+### What the SDC File Controls
 
-If you want line-by-line details for any specific value or want to learn how to further optimize any of these parameters, let me know!
+- The SDC (Synopsys Design Constraints) file specifies **timing constraints** (like clocks, input delays, output delays, false paths) for your design.
+- Its main goal is to tell the synthesis tool how fast your circuit needs to operate, which inputs/outputs are related to which clocks, and which signals should be ignored for timing.
+
+### How Area and Power Are Determined
+
+- **Area and power are not set directly by the SDC file.**  
+  Instead, they are influenced by your netlist (RTL code), the library you use (cell area, power models), and the synthesis tool's optimizations performed to meet the constraints you provide.
+- When you set a **tight timing constraint** (shorter clock period), the tool may optimize the design to be faster—potentially increasing area and dynamic power to meet timing.
+- If timing constraints are **relaxed** (longer clock period), the tool might use smaller, slower, or fewer gates—reducing area and power.
+
+### How to Judge Whether Area and Power Are "Proper"
+
+- You can tell if your area and power are **reasonable** only by interpreting the reports generated after synthesis.
+  - **Area report** (e.g., `counter_area.rpt`): Shows the total cell and total area in μm².
+  - **Power report** (e.g., `counter_power.rpt`): Details dynamic and leakage power.
+- What is "correct" depends on:
+  - The logic complexity (for a 3-bit counter, both area and power should be extremely low).
+  - The technology node/library being used.
+  - Meeting your timing constraints **without extra, unnecessary logic or excessive switching activity**.
+
+#### Example: For a simple 3-bit counter, single-digit μW power and under 50μm² area are typical in small nodes like 32nm, and large positive slack in timing reports confirms no excessive effort is wasted to just barely meet timing.
+
+### Key Points
+
+- **You do not set area and power in the SDC**—the tool tries to meet the required timing with minimal hardware.
+- **Reports are "proper" if:**
+  - Your timing constraints are satisfied (large, positive slack).
+  - Area and power values match expectations for your counter size and target library.
+  - No "over-design" (unreasonably large area/power for the function) or "under-design" (unable to meet timing, or missing logic).
+- For advanced optimization, you can add **area or power constraints** using tool-specific commands in your synthesis script (not SDC), but for most student flows, reviewing the reports is sufficient.
+
+**In summary:**  
+Your SDC file guides the tool to synthesize for speed; the synthesis tool balances this with area/power. The generated area and power reports show you the actual cost, and you determine if they are "proper" by comparing with typical values for your design and technology.
+
+
